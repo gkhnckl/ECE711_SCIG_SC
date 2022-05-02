@@ -57,7 +57,7 @@ Lambda2 = -1/(2*sigma*tau_r) * (1+alpha) + j*(0.5*wrotor - w) - ...
 pf = 1;
 theta = acos(pf);
 
-Iqds0 = Ib/sqrt(2)*exp(-j*theta);  
+Iqds0 = Ib/sqrt(2)*exp(-j*theta);  % in pu
 Iqdr0 = -Iqds0*j*Xm/(j*Xm + j*Xlr + Rr/slip);
 Iqdsinf = 0;
 Iqdrinf = 0;
@@ -78,12 +78,12 @@ C3 = Cmat(3);
 C4 = Cmat(4);
 
 
-t = linspace(0, 3, 10000);
+t = linspace(0, 0.1, 1000);
 Iqds = (C1*exp(Lambda1*t) + C2*exp(Lambda2*t));   % stator current, synchronous frame w=we
 Iqdr = (C3*exp(Lambda1*t) + C4*exp(Lambda2*t));   % rotor current, synchronous frame w=we
 
 Iqdss = Iqds.*exp(j*we*t);     % stator current, stator frame w=0
-figure;plot(t,real(Iqdss)/Ib);
+figure;plot(t,real(Iqdss));
 title('Phase A stator current, stationary frame (\omega=0)')
 xlabel('Time [sec]')
 ylabel('Current [pu]')
