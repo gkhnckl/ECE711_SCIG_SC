@@ -39,51 +39,9 @@ wrotor = wb*(1-slip);      % rad/s, Base speed
 w = 0;  % stationary frame
  
 %% transient constants
-tau_s = Ls/Rs;
-tau_r = Lr/Rr;
-sigma = 1 - Lm^2 / (Lr*Ls);
-alpha = tau_s/tau_r;
+sigma = 1 - Lm^2/(Ls*Lr);
+Ls_prime = sigma*Ls;
 
-tau_s_sc = sigma*tau_s;     %short circuit transient time const.
-tau_r_sc = sigma*tau_r;
+Erp = j*we*(Lr*Irp )
+Eqd_prime = (1-slip)*Lm/Lr*Erp;
 
-Lambda1 = -1/(2*sigma*tau_r) * (1+alpha) + j*(0.5*wrotor - w) + ...
-    1/(2*sigma*tau_r) * sqrt((1+alpha)^2 - 4*sigma*alpha - (wrotor*sigma*tau_r)^2 + j*2*(alpha-1)*wrotor*sigma*tau_r);
-
-Lambda2 = -1/(2*sigma*tau_r) * (1+alpha) + j*(0.5*wrotor - w) - ...
-    1/(2*sigma*tau_r) * sqrt((1+alpha)^2 - 4*sigma*alpha - (wrotor*sigma*tau_r)^2 + j*2*(alpha-1)*wrotor*sigma*tau_r);
-
-
-pf = 1;
-theta = acos(pf);
-
-Iqds0 = Ib/sqrt(2)*exp(-j*theta);  % in pu
-Iqdr0 = -Iqds0*j*Xm/(j*Xm + j*Xlr + Rr/slip);
-Iqdsinf = 0;
-Iqdrinf = 0;
-
-Xmat = [Iqds0; Iqdr0; 0; 0];
-Tmat = [1, 1, 0, 0;
-    0, 0, 1, 1;
-    Rs+j*we*Ls+Ls*Lambda1, Rs+j*we*Ls+Ls*Lambda2, Lambda1*Lm+j*Lm*we, Lambda2*Lm+j*Lm*we;
-    Lm*Lambda1+Lm*j*(we-wrotor), Lm*Lambda2+Lm*j*(we-wrotor), Rr+j*Lr*(we-wrotor)+Lr*Lambda1, Rr+j*Lr*(we-wrotor)+Lr*Lambda2];
-
-%Cmat = [C1; C2; C3; C4]
-
-Cmat = Tmat\Xmat;
-
-C1 = Cmat(1);
-C2 = Cmat(2);
-C3 = Cmat(3);
-C4 = Cmat(4);
-
-
-t = linspace(0, 0.1, 1000);
-Iqds = (C1*exp(Lambda1*t) + C2*exp(Lambda2*t));   % stator current, synchronous frame w=we
-Iqdr = (C3*exp(Lambda1*t) + C4*exp(Lambda2*t));   % rotor current, synchronous frame w=we
-
-Iqdss = Iqds.*exp(j*we*t);     % stator current, stator frame w=0
-figure;plot(t,real(Iqdss));
-title('Phase A stator current, stationary frame (\omega=0)')
-xlabel('Time [sec]')
-ylabel('Current [pu]')
