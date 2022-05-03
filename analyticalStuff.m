@@ -54,5 +54,14 @@ C = Vsp/(j*wrotor*Ls_prime);
 
 t = linspace(0,0.1,10000);
 iqds = C*exp(-eig*t) + Isc*exp(j*wrotor*t);
+iqdr = iqds * j*Xm/ (j*Xm + j*Xlr + Rr/slip);
+iqs = real(iqds);
+ids = -imag(iqds);
+iqr = real(iqdr);
+idr = -imag(iqdr);
+T_transient = 3/2*p/6*Lm * (ids.*iqr - iqs.*idr);
 plot(t, -real(iqds/Ib));
 title('Plot of phase A current')
+figure
+plot(t, T_transient/Tb);
+title('Plot of torque')
