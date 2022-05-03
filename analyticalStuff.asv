@@ -59,7 +59,7 @@ iqs = real(iqds);
 ids = -imag(iqds);
 iqr = real(iqdr);
 idr = -imag(iqdr);
-T_transient = Tb - (3/2*p/6*Lm * (ids.*iqr - iqs.*idr)).*(t>=0);
+T_transient = -Tb + (3/2*p/6*Lm * (ids.*iqr - iqs.*idr))*;
 plot(t, -real(iqds/Ib));
 title('Plot of phase A current')
 ylabel('pu')
