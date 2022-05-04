@@ -59,11 +59,11 @@ iqs = real(iqds);
 ids = -imag(iqds);
 iqr = real(iqdr);
 idr = -imag(iqdr);
-T_transient = Tb + (3/2*p/6*Lm * (ids.*iqr - iqs.*idr)).*(t>=0);
+T_transient = Tb + (3/2*p/6*Lm * (iqs.*idr - ids.*iqr)).*(t>=0);
 plot(t, -real(iqds/Ib));
 title('Plot of phase A current')
 ylabel('pu')
 figure
-plot(t, -T_transient/Tb);
+plot(t, T_transient/Tb);
 title('Plot of torque')
 ylabel('pu')
